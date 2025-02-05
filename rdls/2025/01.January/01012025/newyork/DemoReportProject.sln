@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "new york", "new york.rptproj", "{3B71DE4E-23F2-466A-9CC0-6A92E79CA03B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Default = Debug|Default
+		DebugLocal|Default = DebugLocal|Default
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B71DE4E-23F2-466A-9CC0-6A92E79CA03B}.Debug|Default.ActiveCfg = Debug
+		{3B71DE4E-23F2-466A-9CC0-6A92E79CA03B}.Debug|Default.Build.0 = Debug
+		{3B71DE4E-23F2-466A-9CC0-6A92E79CA03B}.Debug|Default.Deploy.0 = Debug
+		{3B71DE4E-23F2-466A-9CC0-6A92E79CA03B}.DebugLocal|Default.ActiveCfg = DebugLocal
+		{3B71DE4E-23F2-466A-9CC0-6A92E79CA03B}.DebugLocal|Default.Build.0 = DebugLocal
+		{3B71DE4E-23F2-466A-9CC0-6A92E79CA03B}.Release|Default.ActiveCfg = Release
+		{3B71DE4E-23F2-466A-9CC0-6A92E79CA03B}.Release|Default.Build.0 = Release
+		{3B71DE4E-23F2-466A-9CC0-6A92E79CA03B}.Release|Default.Deploy.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

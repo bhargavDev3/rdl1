@@ -1,0 +1,86 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\bhargavhallmark\\Documents\\rdls\\2024\\12.December\\05122024\\join_age\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3B71DE4E-23F2-466A-9CC0-6A92E79CA03B}|join_age.rptproj|C:\\Users\\bhargavhallmark\\Documents\\rdls\\2024\\12.December\\05122024\\join_age\\05122024b.rdl||{420F4200-DD61-4785-81F3-52669CBC208E}",
+      "RelativeMoniker": "D:0:0:{3B71DE4E-23F2-466A-9CC0-6A92E79CA03B}|join_age.rptproj|solutionrelative:05122024b.rdl||{420F4200-DD61-4785-81F3-52669CBC208E}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3B71DE4E-23F2-466A-9CC0-6A92E79CA03B}|join_age.rptproj|C:\\Users\\bhargavhallmark\\Documents\\rdls\\2024\\12.December\\05122024\\join_age\\05122024.rdl||{420F4200-DD61-4785-81F3-52669CBC208E}",
+      "RelativeMoniker": "D:0:0:{3B71DE4E-23F2-466A-9CC0-6A92E79CA03B}|join_age.rptproj|solutionrelative:05122024.rdl||{420F4200-DD61-4785-81F3-52669CBC208E}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{131369f2-062d-44a2-8671-91ff31efb4f4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{a34b1c5d-6d37-4a0c-a8b0-99f8e8158b48}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:35697994:0:{71f361cc-493f-47c0-923f-f2570b6f8618}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:254354193:0:{71f361cc-493f-47c0-923f-f2570b6f8618}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "05122024b.rdl [Design]",
+              "DocumentMoniker": "C:\\Users\\bhargavhallmark\\Documents\\rdls\\2024\\12.December\\05122024\\join_age\\05122024b.rdl",
+              "RelativeDocumentMoniker": "05122024b.rdl",
+              "ToolTip": "C:\\Users\\bhargavhallmark\\Documents\\rdls\\2024\\12.December\\05122024\\join_age\\05122024b.rdl [Design]",
+              "RelativeToolTip": "05122024b.rdl [Design]",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKXSURBVDhPlZVfSFNRHMe/9892573X7W5yvVc3Be\u002Bg1NKgacNBCm1o\u002BSCbhT1Ubxm99AcjCCV6ikqIoIggeskm\u002BGDam89mPWQPBSVT6I\u002BYcw5qOpN5N\u002BduL2nbHbTtAwcO5/s9X77n93IIAHhU7Xi338i0ogAkMgNj8fWxZ2trq3oNAKBpGr27r\u002B0/D6n7eK5Bx5e7w1d9b98ILEE8fRiLreh1EARBAUB3ubn/YCBgZ2QJkYlX2AzN5yx1OQzR54XJXm0xJlTRtLTEihS18DWVUlVNy2Rn7jUEgMS371h\u002BEcw\u002BAgAwkoSac2dAMiaUNzU17kuqjDAzs7m\u002BszM\u002BnUiEI\u002Bl0atdL5l79Pz\u002Bej0BdjaC6r89pVpy3\u002BiX5RAfH2a0UtVespEAAiLycRGRiEodHg2WMo3b4rEU4ddpiEXf1kgO17W3EP3xEaHCIUAausFXtHRfaWe7i5YoKO/QzLITs74G5uRkAQBoNsHk8oE1lTpIxnoxNTaUA3C6q4Y6q4uf0axAECc6pgHMqKKupwfrse3AN9bAdbW/UQPSg2IbpeByhG4MAAIpjQfPl0LQMtn/F0HDvTo63qIbZVPX2onVyHK7RIEwOh17OD2QkCQce3Efzk8cQuzr1Mmieg0mWwUiVIOn8B\u002BYF0jwP0XsMlV2d4JQ6vVyQvEA9BpsNVk8brJ42GGw2vZxHwUChxQVXcASu4AiEFpdezqNgYKnkTTUZjSI0dBMkTWNjbg7p35uYu3YdALDx6TMSi4tIrkaRSaeRjEb113Mbskod5IAfBkEAxfOwut0QfV5QPA\u002BK5yH6vLC63aB4HgZBgBzwg1WU7Ih/DbfCYZgPNaGq159jKIatcHhvT\u002BDvF1DPmI5km0plPqnOXlpZdv8BpMDAqADhOGgAAAAASUVORK5CYII=",
+              "WhenOpened": "2025-02-04T05:22:11.173Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "05122024.rdl [Design]",
+              "DocumentMoniker": "C:\\Users\\bhargavhallmark\\Documents\\rdls\\2024\\12.December\\05122024\\join_age\\05122024.rdl",
+              "RelativeDocumentMoniker": "05122024.rdl",
+              "ToolTip": "C:\\Users\\bhargavhallmark\\Documents\\rdls\\2024\\12.December\\05122024\\join_age\\05122024.rdl [Design]",
+              "RelativeToolTip": "05122024.rdl [Design]",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKXSURBVDhPlZVfSFNRHMe/9892573X7W5yvVc3Be\u002Bg1NKgacNBCm1o\u002BSCbhT1Ubxm99AcjCCV6ikqIoIggeskm\u002BGDam89mPWQPBSVT6I\u002BYcw5qOpN5N\u002BduL2nbHbTtAwcO5/s9X77n93IIAHhU7Xi338i0ogAkMgNj8fWxZ2trq3oNAKBpGr27r\u002B0/D6n7eK5Bx5e7w1d9b98ILEE8fRiLreh1EARBAUB3ubn/YCBgZ2QJkYlX2AzN5yx1OQzR54XJXm0xJlTRtLTEihS18DWVUlVNy2Rn7jUEgMS371h\u002BEcw\u002BAgAwkoSac2dAMiaUNzU17kuqjDAzs7m\u002BszM\u002BnUiEI\u002Bl0atdL5l79Pz\u002Bej0BdjaC6r89pVpy3\u002BiX5RAfH2a0UtVespEAAiLycRGRiEodHg2WMo3b4rEU4ddpiEXf1kgO17W3EP3xEaHCIUAausFXtHRfaWe7i5YoKO/QzLITs74G5uRkAQBoNsHk8oE1lTpIxnoxNTaUA3C6q4Y6q4uf0axAECc6pgHMqKKupwfrse3AN9bAdbW/UQPSg2IbpeByhG4MAAIpjQfPl0LQMtn/F0HDvTo63qIbZVPX2onVyHK7RIEwOh17OD2QkCQce3Efzk8cQuzr1Mmieg0mWwUiVIOn8B\u002BYF0jwP0XsMlV2d4JQ6vVyQvEA9BpsNVk8brJ42GGw2vZxHwUChxQVXcASu4AiEFpdezqNgYKnkTTUZjSI0dBMkTWNjbg7p35uYu3YdALDx6TMSi4tIrkaRSaeRjEb113Mbskod5IAfBkEAxfOwut0QfV5QPA\u002BK5yH6vLC63aB4HgZBgBzwg1WU7Ih/DbfCYZgPNaGq159jKIatcHhvT\u002BDvF1DPmI5km0plPqnOXlpZdv8BpMDAqADhOGgAAAAASUVORK5CYII=",
+              "WhenOpened": "2025-02-04T05:21:28.429Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 7,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
