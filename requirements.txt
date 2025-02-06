@@ -1,2 +1,3 @@
 requests
 requests_ntlm
+pip install requests requests_ntlm
