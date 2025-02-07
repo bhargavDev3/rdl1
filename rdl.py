@@ -1,125 +1,199 @@
 import os
 import re
 import subprocess
+import requests
+from requests_ntlm import HttpNtlmAuth
 
 # Constants
-CLIENT_NAME = "DemoReports"  # Change this to the new client name
-PROJECT_FILE_PATH = r"C:\Users\bhargavhallmark\rdl1\rdl1\rdls\2024\09.September\03092024\DemoReportProject\DemoReportProject.rptproj"  # Path to .rptproj file
+BASE_DIR = r"C:\Users\bhargavhallmark\rdl1\rdl1\rdls"
+START_YEAR = "2024"
+START_MONTH = "09.September"
+START_DATE = "03092024"
+
+CLIENT_NAME = "DemoReports"
+VS_PATH = r"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\devenv.exe"
+
 REPORT_USER = "bhargavhallmark"
 REPORT_PASSWORD = "qL5R*MLO[h_S<26"
-REPORT_SERVER_URL = "http://hallmark2/ReportServer"  # Use the SSRS Web Service endpoint
+REPORT_SERVER_URL = "http://hallmark2/Reports"
 
-# Derived paths
-PROJECT_DIR = os.path.dirname(PROJECT_FILE_PATH)
-RDS_FILE_PATH = os.path.join(PROJECT_DIR, "HallmarkDS.rds")
-RDL_FILES = [os.path.join(PROJECT_DIR, f) for f in os.listdir(PROJECT_DIR) if f.endswith(".rdl")]
+DATABASE_NAME = "DemoReportsDB"
+DATA_SOURCE = "HALLMARK2"
 
-# Fixed inputs
-DATABASE_NAME = "DemoReportsDB"  # Hardcoded database name
-DATA_SOURCE = "HALLMARK2"  # Hardcoded data source
+def find_solution_and_project_files(folder_path):
+    """Finds all .sln and .rptproj files in the given folder structure."""
+    solution_files = []
+    rptproj_files = []
+
+    for root, _, files in os.walk(folder_path):
+        for file in files:
+            if file.endswith(".sln"):
+                solution_files.append(os.path.join(root, file))
+            elif file.endswith(".rptproj"):
+                rptproj_files.append(os.path.join(root, file))
+
+    return solution_files, rptproj_files
+
+def find_rdl_files(folder_path):
+    """Finds all .rdl files in the project directory."""
+    rdl_files = []
+    for root, _, files in os.walk(folder_path):
+        for file in files:
+            if file.endswith(".rdl"):
+                rdl_files.append(os.path.join(root, file))
+    return rdl_files
 
 def update_rptproj_file(rptproj_path, client_name, report_server_url):
+    """Updates the .rptproj file with correct report server paths."""
     try:
-        # Read the .rptproj file as a text file
         with open(rptproj_path, 'r') as file:
             content = file.read()
 
-        # Replace TargetReportFolder
-        content = re.sub(
-            r'<TargetReportFolder>.*</TargetReportFolder>',
-            f'<TargetReportFolder>/{client_name}/RDLS</TargetReportFolder>',
-            content
-        )
+        content = re.sub(r'<TargetReportFolder>.*</TargetReportFolder>', 
+                         f'<TargetReportFolder>/{client_name}/RDLS</TargetReportFolder>', content)
+        content = re.sub(r'<TargetDatasourceFolder>.*</TargetDatasourceFolder>', 
+                         f'<TargetDatasourceFolder>/{client_name}/DS</TargetDatasourceFolder>', content)
+        content = re.sub(r'<TargetServerURL>.*</TargetServerURL>', 
+                         f'<TargetServerURL>{report_server_url}</TargetServerURL>', content)
 
-        # Replace TargetDatasourceFolder
-        content = re.sub(
-            r'<TargetDatasourceFolder>.*</TargetDatasourceFolder>',
-            f'<TargetDatasourceFolder>/{client_name}/DS</TargetDatasourceFolder>',
-            content
-        )
-
-        # Replace TargetServerURL
-        content = re.sub(
-            r'<TargetServerURL>.*</TargetServerURL>',
-            f'<TargetServerURL>{report_server_url}</TargetServerURL>',
-            content
-        )
-
-        # Write the updated content back to the file
         with open(rptproj_path, 'w') as file:
             file.write(content)
-        print(f"Successfully updated: {rptproj_path}")
-    except Exception as e:
-        print(f"An error occurred while updating {rptproj_path}: {e}")
 
-def update_rds_file(rds_path, data_source, database_name):
+        print(f"Updated: {rptproj_path}")
+    except Exception as e:
+        print(f"Error updating {rptproj_path}: {e}")
+
+def rebuild_and_deploy_solution(sln_path):
+    """Rebuilds and deploys the solution using Visual Studio's CLI."""
+    if not os.path.exists(VS_PATH):
+        print(f"Error: Visual Studio not found at {VS_PATH}")
+        return False
+    
     try:
-        with open(rds_path, 'r') as file:
-            content = file.read()
+        rebuild_command = [VS_PATH, sln_path, "/Rebuild", "Release"]
+        rebuild_result = subprocess.run(rebuild_command, capture_output=True, text=True)
 
-        # Replace the entire connection string
-        content = re.sub(
-            r'Data Source=\w+;Initial Catalog=\w+DB',
-            f'Data Source={data_source};Initial Catalog={database_name}',
-            content
-        )
+        if rebuild_result.returncode != 0:
+            print("Solution rebuild failed!")
+            print(rebuild_result.stderr)
+            return False
 
-        with open(rds_path, 'w') as file:
-            file.write(content)
-        print(f"Successfully updated: {rds_path}")
-    except PermissionError:
-        print(f"Permission denied: {rds_path}. Ensure you have read/write access.")
-    except FileNotFoundError:
-        print(f"File not found: {rds_path}. Ensure the path is correct.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-def rebuild_solution(sln_path):
-    msbuild_path = r"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe"
-    command = [msbuild_path, sln_path, "/t:Rebuild", "/p:Configuration=Release"]
-    result = subprocess.run(command, capture_output=True, text=True)
-    if result.returncode == 0:
         print("Solution rebuilt successfully.")
-    else:
-        print("Failed to rebuild solution:", result.stderr)
+
+        deploy_command = [VS_PATH, sln_path, "/Deploy", "Release"]
+        deploy_result = subprocess.run(deploy_command, capture_output=True, text=True)
+
+        if deploy_result.returncode == 0:
+            print("Deployment successful!")
+            return True
+        else:
+            print("Deployment failed!")
+            print(deploy_result.stderr)
+            return False
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
 
 def deploy_rdl_files(rdl_files, client_name, username, password):
-    rs_exe_path = r"C:\Program Files\Microsoft SQL Server Reporting Services\Shared Tools\RS.exe"
+    """Uploads RDL files to SSRS via HTTP PUT request."""
     for rdl_file in rdl_files:
         report_name = os.path.basename(rdl_file).replace('.rdl', '')
         target_folder = f"/{client_name}/RDLS"
-        command = [
-            rs_exe_path,
-            '-i', rdl_file,  # Input .rdl file
-            '-s', REPORT_SERVER_URL,  # SSRS server URL
-            '-u', username,  # Username
-            '-p', password,  # Password
-            '-l', '600',  # Timeout for connection (600 seconds)
-            '-v', '600',  # Timeout for execution (600 seconds)
-            '-e', 'Exec2005',  # Execution mode (for SSRS 2005 compatibility)
-            '-o'  # Overwrite existing report if it exists
-        ]
-        try:
-            result = subprocess.run(command, capture_output=True, text=True)
-            if result.returncode == 0:
-                print(f"Successfully deployed {report_name} to {target_folder}")
-            else:
-                print(f"Failed to deploy {report_name}: {result.stderr}")
-        except Exception as e:
-            print(f"An error occurred while deploying {report_name}: {e}")
+        url = f"{REPORT_SERVER_URL}/browse/{client_name}/RDLS"
+        headers = {'Content-Type': 'application/octet-stream'}
+        params = {'TargetFolder': target_folder, 'Overwrite': 'true'}
 
-def main():
-    # Update .rptproj file
-    update_rptproj_file(PROJECT_FILE_PATH, CLIENT_NAME, REPORT_SERVER_URL)
+        with open(rdl_file, 'rb') as file:
+            try:
+                response = requests.put(
+                    url, headers=headers, params=params, data=file, 
+                    auth=HttpNtlmAuth(username, password)
+                )
+                if response.status_code == 200:
+                    print(f"Successfully deployed {report_name} to {target_folder}")
+                else:
+                    print(f"Failed to deploy {report_name}: {response.status_code} - {response.text}")
+            except Exception as e:
+                print(f"Error deploying {report_name}: {e}")
 
-    # Update .rds file
-    update_rds_file(RDS_FILE_PATH, DATA_SOURCE, DATABASE_NAME)
+def process_folder(folder_path):
+    """Recursively processes all subfolders in a given directory."""
+    solution_files, rptproj_files = find_solution_and_project_files(folder_path)
 
-    # Rebuild the solution
-    rebuild_solution(PROJECT_FILE_PATH)
+    if not solution_files or not rptproj_files:
+        print(f"No solution/project files found in {folder_path}")
+        return
 
-    # Deploy .rdl files
-    deploy_rdl_files(RDL_FILES, CLIENT_NAME, REPORT_USER, REPORT_PASSWORD)
+    rdl_files = find_rdl_files(folder_path)
+
+    if not rdl_files:
+        print(f"No RDL files found in {folder_path}")
+        return
+
+    print(f"Found Solution: {solution_files[0]}")
+    print(f"Found RDL Files: {len(rdl_files)}")
+
+    for rptproj_file in rptproj_files:
+        update_rptproj_file(rptproj_file, CLIENT_NAME, REPORT_SERVER_URL)
+
+    if rebuild_and_deploy_solution(solution_files[0]):
+        deploy_rdl_files(rdl_files, CLIENT_NAME, REPORT_USER, REPORT_PASSWORD)
+
+    # Process all subdirectories within this folder
+    subfolders = sorted([os.path.join(folder_path, d) for d in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, d))])
+    
+    for subfolder in subfolders:
+        process_folder(subfolder)
+
+def execute_rdl_deployment():
+    """Processes all folders from START_YEAR/START_MONTH/START_DATE onward."""
+    start_processing = False
+
+    year_folders = sorted(os.listdir(BASE_DIR))
+
+    for year_folder in year_folders:
+        year_path = os.path.join(BASE_DIR, year_folder)
+
+        if not os.path.isdir(year_path):
+            continue
+
+        if year_folder == START_YEAR:
+            start_processing = True
+
+        if not start_processing:
+            continue
+
+        month_folders = sorted(os.listdir(year_path))
+
+        for month_folder in month_folders:
+            month_path = os.path.join(year_path, month_folder)
+
+            if not os.path.isdir(month_path):
+                continue
+
+            if year_folder == START_YEAR and month_folder == START_MONTH:
+                start_processing = True
+
+            if not start_processing:
+                continue
+
+            date_folders = sorted(os.listdir(month_path))
+
+            for date_folder in date_folders:
+                date_path = os.path.join(month_path, date_folder)
+
+                if not os.path.isdir(date_path):
+                    continue
+
+                if year_folder == START_YEAR and month_folder == START_MONTH and date_folder == START_DATE:
+                    start_processing = True
+
+                if not start_processing:
+                    continue
+
+                print(f"Processing: {date_path}")
+                process_folder(date_path)
 
 if __name__ == "__main__":
-    main()
+    execute_rdl_deployment()
