@@ -17,31 +17,13 @@ REPORT_USER = "bhargavhallmark"
 REPORT_PASSWORD = "qL5R*MLO[h_S<26"
 REPORT_SERVER_URL = "http://hallmark2/Reports"
 
-DATABASE_NAME = "DemoReportsDB"
-DATA_SOURCE = "HALLMARK2"
-
-def find_solution_and_project_files(folder_path):
-    """Finds all .sln and .rptproj files in the given folder structure."""
-    solution_files = []
-    rptproj_files = []
-
-    for root, _, files in os.walk(folder_path):
-        for file in files:
-            if file.endswith(".sln"):
-                solution_files.append(os.path.join(root, file))
-            elif file.endswith(".rptproj"):
-                rptproj_files.append(os.path.join(root, file))
-
-    return solution_files, rptproj_files
+def find_solution_files(folder_path):
+    """Finds all .sln files in a given folder."""
+    return [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(".sln")]
 
 def find_rdl_files(folder_path):
-    """Finds all .rdl files in the project directory."""
-    rdl_files = []
-    for root, _, files in os.walk(folder_path):
-        for file in files:
-            if file.endswith(".rdl"):
-                rdl_files.append(os.path.join(root, file))
-    return rdl_files
+    """Finds all .rdl files in the same directory as the .sln file."""
+    return [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(".rdl")]
 
 def update_rptproj_file(rptproj_path, client_name, report_server_url):
     """Updates the .rptproj file with correct report server paths."""
@@ -49,11 +31,11 @@ def update_rptproj_file(rptproj_path, client_name, report_server_url):
         with open(rptproj_path, 'r') as file:
             content = file.read()
 
-        content = re.sub(r'<TargetReportFolder>.*</TargetReportFolder>', 
+        content = re.sub(r'<TargetReportFolder>.*?</TargetReportFolder>', 
                          f'<TargetReportFolder>/{client_name}/RDLS</TargetReportFolder>', content)
-        content = re.sub(r'<TargetDatasourceFolder>.*</TargetDatasourceFolder>', 
+        content = re.sub(r'<TargetDatasourceFolder>.*?</TargetDatasourceFolder>', 
                          f'<TargetDatasourceFolder>/{client_name}/DS</TargetDatasourceFolder>', content)
-        content = re.sub(r'<TargetServerURL>.*</TargetServerURL>', 
+        content = re.sub(r'<TargetServerURL>.*?</TargetServerURL>', 
                          f'<TargetServerURL>{report_server_url}</TargetServerURL>', content)
 
         with open(rptproj_path, 'w') as file:
@@ -118,33 +100,26 @@ def deploy_rdl_files(rdl_files, client_name, username, password):
                 print(f"Error deploying {report_name}: {e}")
 
 def process_folder(folder_path):
-    """Recursively processes all subfolders in a given directory."""
-    solution_files, rptproj_files = find_solution_and_project_files(folder_path)
-
-    if not solution_files or not rptproj_files:
-        print(f"No solution/project files found in {folder_path}")
-        return
-
-    rdl_files = find_rdl_files(folder_path)
-
-    if not rdl_files:
-        print(f"No RDL files found in {folder_path}")
-        return
-
-    print(f"Found Solution: {solution_files[0]}")
-    print(f"Found RDL Files: {len(rdl_files)}")
-
-    for rptproj_file in rptproj_files:
-        update_rptproj_file(rptproj_file, CLIENT_NAME, REPORT_SERVER_URL)
-
-    if rebuild_and_deploy_solution(solution_files[0]):
-        deploy_rdl_files(rdl_files, CLIENT_NAME, REPORT_USER, REPORT_PASSWORD)
-
-    # Process all subdirectories within this folder
+    """Processes all subdirectories inside a date folder for .sln files."""
     subfolders = sorted([os.path.join(folder_path, d) for d in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, d))])
     
     for subfolder in subfolders:
-        process_folder(subfolder)
+        sln_files = find_solution_files(subfolder)
+        if not sln_files:
+            continue
+
+        for sln_file in sln_files:
+            rdl_files = find_rdl_files(os.path.dirname(sln_file))
+
+            print(f"Found Solution: {sln_file}")
+            print(f"Found RDL Files: {len(rdl_files)}")
+
+            rptproj_files = [os.path.join(subfolder, file) for file in os.listdir(subfolder) if file.endswith(".rptproj")]
+            for rptproj_file in rptproj_files:
+                update_rptproj_file(rptproj_file, CLIENT_NAME, REPORT_SERVER_URL)
+
+            if rebuild_and_deploy_solution(sln_file):
+                deploy_rdl_files(rdl_files, CLIENT_NAME, REPORT_USER, REPORT_PASSWORD)
 
 def execute_rdl_deployment():
     """Processes all folders from START_YEAR/START_MONTH/START_DATE onward."""
