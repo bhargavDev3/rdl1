@@ -17,6 +17,10 @@ REPORT_USER = "bhargavhallmark"
 REPORT_PASSWORD = "qL5R*MLO[h_S<26"
 REPORT_SERVER_URL = "http://hallmark2/Reports"
 
+# For .rds DataSource
+NEW_DATA_SOURCE = "HALLMARK2"
+DataBase = "DemoReportDB"
+
 def find_solution_files(folder_path):
     """Finds all .sln files in a given folder."""
     return [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(".sln")]
@@ -44,6 +48,22 @@ def update_rptproj_file(rptproj_path, client_name, report_server_url):
         print(f"Updated: {rptproj_path}")
     except Exception as e:
         print(f"Error updating {rptproj_path}: {e}")
+
+def update_rds_file(rds_path, new_data_source, DataBase):
+    """Updates the .rds file with the new data source and catalog."""
+    try:
+        with open(rds_path, 'r') as file:
+            content = file.read()
+
+        content = re.sub(r'<ConnectString>Data Source=.*?;Initial Catalog=.*?</ConnectString>', 
+                         f'<ConnectString>Data Source={new_data_source};Initial Catalog={DataBase}</ConnectString>', content)
+
+        with open(rds_path, 'w') as file:
+            file.write(content)
+
+        print(f"Updated: {rds_path}")
+    except Exception as e:
+        print(f"Error updating {rds_path}: {e}")
 
 def rebuild_and_deploy_solution(sln_path):
     """Rebuilds and deploys the solution using Visual Studio's CLI."""
@@ -117,6 +137,10 @@ def process_folder(folder_path):
             rptproj_files = [os.path.join(subfolder, file) for file in os.listdir(subfolder) if file.endswith(".rptproj")]
             for rptproj_file in rptproj_files:
                 update_rptproj_file(rptproj_file, CLIENT_NAME, REPORT_SERVER_URL)
+
+            rds_files = [os.path.join(subfolder, file) for file in os.listdir(subfolder) if file.endswith(".rds")]
+            for rds_file in rds_files:
+                update_rds_file(rds_file, NEW_DATA_SOURCE, DataBase)
 
             if rebuild_and_deploy_solution(sln_file):
                 deploy_rdl_files(rdl_files, CLIENT_NAME, REPORT_USER, REPORT_PASSWORD)

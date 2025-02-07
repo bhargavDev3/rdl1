@@ -1,7 +1,7 @@
 <RptDataSource Name="HallmarkDS">
   <ConnectionProperties>
     <Extension>SQL</Extension>
-    <ConnectString>Data Source=HALLMARK2;Initial Catalog=DemoReportsDB</ConnectString>
+    <ConnectString>Data Source=HALLMARK2;Initial Catalog=DemoReportDB</ConnectString>
     <IntegratedSecurity>true</IntegratedSecurity>
   </ConnectionProperties>
   <DataSourceID>71424d58-6b59-4ce2-a48d-b64c1d983be5</DataSourceID>
